@@ -12,7 +12,7 @@ To get keys to access the datalake, please contact contato@inova.life by email.
 
 ### Using
 
-python```
+```python
 from inovalife_data import DataLakeClient
 
 access_key = "ABC"
@@ -20,7 +20,7 @@ secret_key = "SHHHH"
 
 data = DataLakeClient(access_key, secret_key)
 
-# Check all SQL tables we have:
+Check all SQL tables we have:
 data.tables
 # ["table1", "table2", "table3"]
 
