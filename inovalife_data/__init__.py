@@ -17,16 +17,23 @@ class DataLakeClient(SparkSession):
     .getOrCreate())
     
     self.base_uri = "s3a://datasus/"
-    
-    self.bases = {
-      "SIM_DORES": self.spark.read.option("header", "true").csv(self.base_uri + "Base=SIM_DORES" + "/"), 
-      "SIM_DOFET": self.spark.read.option("header", "true").csv(self.base_uri + "Base=SIM_DOFET" + "/")
+
+    self.sql = self.spark.sql
+
+    # Atualizar as bases e suas respectivas tabelas aqui:
+    self.tabelas = {
+      "SINASC": ["DN"], 
+      "SIM": ["DO_EXT", "DO_FET", "DO_INF", "DO_MAT", "DO"]
     }
     
-    self.bases["SIM_DORES"].registerTempTable("SIM_DORES")
-    self.bases["SIM_DOFET"].registerTempTable("SIM_DOFET")
-    
-    self.tables = self.bases.keys()
-    
-    self.sql = self.spark.sql
-    
+    # Anos - a partir de 1996:
+    self.ano_inicial = 1996
+    self.ano_mais_recente = 2019
+    self.anos_disponiveis = list(range(1996, self.ano_mais_recente + 1))
+
+  def carregar_tabela(self, base, tabela, ano):
+    df = self.spark.read.option("header", "true").csv(self.base_uri + f"Base={base}/Tabela={tabela}/Ano={ano}")
+    tabela_sql = f"tabela_{base}_{tabela}_{ano}"
+    df.registerTempTable(tabela_sql)
+    print(tabela_sql, "carregada.")
+
