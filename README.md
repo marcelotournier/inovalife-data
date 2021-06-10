@@ -22,9 +22,17 @@ data = DataLakeClient(access_key, secret_key)
 
 # Check all SQL tables we have, and the available years:
 data.tabelas
-# {'SINASC': ['DN'], 'SIM': ['DO_EXT', 'DO_FET', 'DO_INF', 'DO_MAT', 'DO']}
+"""
+{
+      "CNES": ["DC", "EE", "EF", "EP", "EQ", "GM", "HB", "IN", "LT"],
+      "SIA": ["AB", "ABO", "ACF", "AD", "AM", "AMP", "AN", "AQ", "AR", "ATD", "BI"],
+      "SIH": ["CH", "CM", "ER", "RD", "RJ", "SP"],
+      "SIM": ["DO_EXT", "DO_FET", "DO_INF", "DO_MAT", "DO"],
+      "SINASC": ["DN"]
+}
+"""
 data.anos_disponiveis
-# ... list from 1996 to 2019
+# [1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
 
 # Create a SQL table to query:
 data.carregar_tabela("SINASC","DN","1996")
