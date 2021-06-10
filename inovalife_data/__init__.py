@@ -22,8 +22,11 @@ class DataLakeClient(SparkSession):
 
     # Atualizar as bases e suas respectivas tabelas aqui:
     self.tabelas = {
-      "SINASC": ["DN"], 
-      "SIM": ["DO_EXT", "DO_FET", "DO_INF", "DO_MAT", "DO"]
+      "CNES": ["DC", "EE", "EF", "EP", "EQ", "GM", "HB", "IN", "LT"],
+      "SIA": ["AB", "ABO", "ACF", "AD", "AM", "AMP", "AN", "AQ", "AR", "ATD", "BI"],
+      "SIH": ["CH", "CM", "ER", "RD", "RJ", "SP"],
+      "SIM": ["DO_EXT", "DO_FET", "DO_INF", "DO_MAT", "DO"],
+      "SINASC": ["DN"]
     }
     
     # Anos - a partir de 1996:
