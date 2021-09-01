@@ -42,8 +42,9 @@ class DataLakeClient(SparkSession):
       .option("header", "true")
       .option("encoding", "ISO-8859-1")
       .csv(self.base_uri + f"Base={base}/Tabela={tabela}/Ano={ano}")
+    )
     tabela_sql = f"tabela_{base}_{tabela}_{ano}"
     df.registerTempTable(tabela_sql)
     print(tabela_sql, "carregada.")
-    )
+    
 
