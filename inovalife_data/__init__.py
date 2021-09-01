@@ -35,7 +35,12 @@ class DataLakeClient(SparkSession):
     self.anos_disponiveis = list(range(1996, self.ano_mais_recente + 1))
 
   def carregar_tabela(self, base, tabela, ano):
-    df = self.spark.read.option("header", "true").csv(self.base_uri + f"Base={base}/Tabela={tabela}/Ano={ano}")
+    df = self
+      .spark
+      .read
+      .option("header", "true")
+      .option("encoding", "ISO-8859-1")
+      .csv(self.base_uri + f"Base={base}/Tabela={tabela}/Ano={ano}")
     tabela_sql = f"tabela_{base}_{tabela}_{ano}"
     df.registerTempTable(tabela_sql)
     print(tabela_sql, "carregada.")
