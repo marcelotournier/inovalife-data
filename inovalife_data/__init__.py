@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import monotonically_increasing_id
 
 
 class DataLakeClient(SparkSession):
@@ -22,8 +23,8 @@ class DataLakeClient(SparkSession):
 
     # Atualizar as bases e suas respectivas tabelas aqui:
     self.tabelas = {
-      "CNES": ["DC", "EE", "EF", "EP", "EQ", "GM", "HB", "IN", "LT"],
-      "SIA": ["AB", "ABO", "ACF", "AD", "AM", "AMP", "AN", "AQ", "AR", "ATD", "BI"],
+      "CNES": ["DC", "EE", "EF", "EP", "EQ", "GM", "HB", "IN", "LT", "PF", "RC", "SR", "ST"],
+      "SIA": ["AB", "ABO", "ACF", "AD", "AM", "AMP", "AN", "AQ", "AR", "ATD", "BI", "PA", "PAS", "PS", "SAD"],
       "SIH": ["CH", "CM", "ER", "RD", "RJ", "SP"],
       "SIM": ["DO_EXT", "DO_FET", "DO_INF", "DO_MAT", "DO"],
       "SINASC": ["DN"]
@@ -35,6 +36,10 @@ class DataLakeClient(SparkSession):
     self.anos_disponiveis = list(range(1996, self.ano_mais_recente + 1))
 
   def carregar_tabela(self, base, tabela, ano):
+    """
+    Carrega uma tabela, adicionando um identificador de linha/evento
+    na coluna "ID_{tabela}"
+    """
     df = (
       self
       .spark
@@ -42,6 +47,7 @@ class DataLakeClient(SparkSession):
       .option("header", "true")
       .option("encoding", "ISO-8859-1")
       .csv(self.base_uri + f"Base={base}/Tabela={tabela}/Ano={ano}")
+      .withColumn(f"ID_{tabela}", monotonically_increasing_id())
     )
     tabela_sql = f"tabela_{base}_{tabela}_{ano}"
     df.registerTempTable(tabela_sql)
