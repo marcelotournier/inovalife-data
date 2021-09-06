@@ -1,5 +1,4 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import monotonically_increasing_id
 
 
 class DataLakeClient(SparkSession):
@@ -36,10 +35,6 @@ class DataLakeClient(SparkSession):
     self.anos_disponiveis = list(range(1996, self.ano_mais_recente + 1))
 
   def carregar_tabela(self, base, tabela, ano):
-    """
-    Carrega uma tabela, adicionando um identificador de linha/evento
-    na coluna "ID_{tabela}"
-    """
     df = (
       self
       .spark
@@ -47,10 +42,8 @@ class DataLakeClient(SparkSession):
       .option("header", "true")
       .option("encoding", "ISO-8859-1")
       .csv(self.base_uri + f"Base={base}/Tabela={tabela}/Ano={ano}")
-      .withColumn(f"ID_{tabela}", monotonically_increasing_id())
     )
     tabela_sql = f"tabela_{base}_{tabela}_{ano}"
     df.registerTempTable(tabela_sql)
     print(tabela_sql, "carregada.")
     
-
