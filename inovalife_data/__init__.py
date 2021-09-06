@@ -46,4 +46,4 @@ class DataLakeClient(SparkSession):
     tabela_sql = f"tabela_{base}_{tabela}_{ano}"
     df.registerTempTable(tabela_sql)
     print(tabela_sql, "carregada.")
-    
+    return df
