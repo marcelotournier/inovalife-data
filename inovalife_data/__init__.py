@@ -1,3 +1,4 @@
+import uuid
 from pyspark.sql import SparkSession
 
 
@@ -47,3 +48,17 @@ class DataLakeClient(SparkSession):
     df.registerTempTable(tabela_sql)
     print(tabela_sql, "carregada.")
     return df
+
+  
+def converter_spark_em_pandas(df):
+  """
+  Converte o dataframe Spark em Pandas, adicionando uma coluna
+  de identificador unico e deterministico para cada linha da tabela
+  """
+  data = df.toPandas()
+  data["ID_REGISTRO_TABELA"] = data.apply(
+    lambda row: uuid.uuid5(
+      uuid.UUID('a658b648-167e-4d4c-8e09-6dfe7a798204'),
+      "".join(map(str, row.values))).__str__(),
+    axis=1)
+  return data
